@@ -6,7 +6,11 @@ import pyspark.sql.functions as f 	#Access to spark functions (col, to_date, std
 
 
 #### Create Spark Session ####
-spark = SparkSession.builder().master("local[1]").appName("BTCoinVolatility").getOrCreate()  
+findspark.init(env_variables['Spark_env'])
+conf = pyspark.SparkConf().setAppName('BTCoinVolatility').setMaster('local')
+sc = pyspark.SparkContext(conf=conf)
+sc.setLogLevel("ERROR")
+spark = SparkSession(sc)
 
 #### Data Base Credentials ####
 hostname =  ""
@@ -51,3 +55,6 @@ BTCoin_df.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, 
 
 #### Insert data in DB from the previous dataframe (BTCoin_Agg) ####
 BTCoin_Agg.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, table = "[dbo].[BTCoinDailyData]", properties = connection_properties)
+
+#### Close Spark Context ####
+sc.stop()
