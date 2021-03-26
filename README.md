@@ -91,7 +91,7 @@ BTCoin_Transformation = BTCoin_Transformation.withColumn('PriceAvg', (f.col('pri
 #Aggregations for standard deviation and other sums can add value to the data
 BTCoin_Agg = BTCoin_Transformation.groupBy('StartDate').agg(f.stddev('PriceAvg').alias('PriceStd'),f.sum('trades_count').alias('DailyTrades'),f.sum('volume_traded').alias('DailyVolume'))
 ```
-6. Finaly in this last block of code from line 49 to 53 the data inside the dataframes **BTCoin_df** and **BTCoin_Agg** are stored inside tables (**BTCPeriodicRawData** and **BTCoinDailyData**) in the database configured earlier in the code.
+6. Finaly in this last block of code from line 49 to 53 the data inside the dataframes **BTCoin_df** and **BTCoin_Agg** is stored inside tables (**BTCPeriodicRawData** and **BTCoinDailyData**) in the database configured earlier in the code.
 ```
 #### Insert Raw data in DB ####
 BTCoin_df.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, table = "[dbo].[BTCPeriodicRawData]", properties = connection_properties)
