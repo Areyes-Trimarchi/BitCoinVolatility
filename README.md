@@ -28,12 +28,16 @@ import requests
 import pyspark<sup>1</sup> 						
 import pyspark.sql.functions as f 
 ```
-2. The next block from lines 8 and 9 are for the initialization of the **SparkSession** which helps establish the spark in a local environment.
+2. The next block from line 8 to 13 are for the initialization of the **SparkSession** which helps establish the spark in a local environment.
 ```
-#### Create Spark Session ####
-spark = SparkSession.builder().master("local[1]").appName("BTCoinVolatility").getOrCreate()<sup>1</sup>
+#### Create Spark Session ####<sup>1</sup> 	
+findspark.init(env_variables['Spark_env'])
+conf = pyspark.SparkConf().setAppName('BTCoinVolatility').setMaster('local')
+sc = pyspark.SparkContext(conf=conf)
+sc.setLogLevel("ERROR")
+spark = SparkSession(sc)
 ```
-3. The code block from line 11 to 23 are to establish the connection with the desired database for later storage.
+3. The code block from line 15 to 27 are to establish the connection with the desired database for later storage.
 It is written earlier in the code for order purposes. This labels will be later used in the writing process.
 ```
 #### Data Base Credentials ####
@@ -50,8 +54,8 @@ connection_properties = {
   "driver" : 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
 }
 ```
-4. The next code block from line 25 to 30 is where the data is gathered and processed to become a dataframe.
-The count method can be applied to the dataframe to see how much data it contains ().
+4. The next code block from line 29 to 35 is where the data is gathered and processed to become a dataframe.
+The count method can be applied to the dataframe to see how much data it contains (87840 rows).
 ```
 #### Get Data ####
 #Get data from URL and load it to a json object
@@ -61,7 +65,7 @@ jsonObject = json.loads(jsonString)
 #### Create Dataframe from json collected ####
 BTCoin_df = spark.read.json(sc.parallelize(jsonObject))
 ```
-5. This next code block from line 33 to 47 contains the transformation process for the data.
+5. This next code block from line 37 to 51 contains the transformation process for the data.
 First I create a new label called **BTCoin_Transformation** and assign the original dataframe **BTCoin_df** to it to handle the transformations in a cleaner way.
 After this I used the spark method `withColumn` to create 2 columns: `StartDate` which contains the parsed date from `time_period_start` and `PriceAvg` where I took the average from the prices in each time period.
 Finaly I used the spark methods `groupBy` and `agg` to aggregate the data for the standard deviation and sums generating a new dataframe assigned to the label **BTCoin_Agg**.
@@ -91,13 +95,18 @@ BTCoin_Transformation = BTCoin_Transformation.withColumn('PriceAvg', (f.col('pri
 #Aggregations for standard deviation and other sums can add value to the data
 BTCoin_Agg = BTCoin_Transformation.groupBy('StartDate').agg(f.stddev('PriceAvg').alias('PriceStd'),f.sum('trades_count').alias('DailyTrades'),f.sum('volume_traded').alias('DailyVolume'))
 ```
-6. Finaly in this last block of code from line 49 to 53 the data inside the dataframes **BTCoin_df** and **BTCoin_Agg** is stored inside tables (**BTCPeriodicRawData** and **BTCoinDailyData**) in the database configured earlier in the code.
+6. In this block of code from line 53 to 57 the data inside the dataframes **BTCoin_df** and **BTCoin_Agg** is stored inside tables (**BTCPeriodicRawData** and **BTCoinDailyData**) in the database configured earlier in the code.
 ```
 #### Insert Raw data in DB ####
 BTCoin_df.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, table = "[dbo].[BTCPeriodicRawData]", properties = connection_properties)
 
 #### Insert data in DB from the previous dataframe (BTCoin_Agg) ####
 BTCoin_Agg.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, table = "[dbo].[BTCoinDailyData]", properties = connection_properties)
+```
+7. Finally in this last block of code in line 60 when running in a local environment you must stop the Spark Session
+```
+#### Close Spark Context ####
+sc.stop()
 ```
 ##Notes##
 *1: Code that needs to be added if runned in a local environment or one that needs to create a spark context environment
