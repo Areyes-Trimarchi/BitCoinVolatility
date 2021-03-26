@@ -12,7 +12,7 @@ So the result is a table that contains 4 columns: `StartDate`, `PriceStd`, `Dail
 ## Instructions ##
 There are several ways to run this code. I used azure databricks which is cloud based, but also included some lines of code that help when this code is runned in a local environment like using jupyter and anaconda.
 
-In case you try to run it in a local environment you will need to install anaconda, jupyter and pyspark. After that the code can be runned in a jupyter notebook.
+In case you try to run it in a local environment you will need to install anaconda, jupyter and pyspark. After that the code can be runned in a jupyter notebook. You'll also need to fill in the variables for the database as I left them empty.
 
 ## The Code ##
 1. On the first block from line 1 to 6:
