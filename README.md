@@ -108,5 +108,6 @@ BTCoin_Agg.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url,
 #### Close Spark Context ####
 sc.stop()
 ```
-##Notes##
+
+## Notes ##
 *1: Code that needs to be added if runned in a local environment or one that needs to create a spark context environment
