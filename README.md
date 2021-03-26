@@ -95,7 +95,7 @@ BTCoin_Transformation = BTCoin_Transformation.withColumn('PriceAvg', (f.col('pri
 #Aggregations for standard deviation and other sums can add value to the data
 BTCoin_Agg = BTCoin_Transformation.groupBy('StartDate').agg(f.stddev('PriceAvg').alias('PriceStd'),f.sum('trades_count').alias('DailyTrades'),f.sum('volume_traded').alias('DailyVolume'))
 ```
-6. In this block of code from line 53 to 57 the data inside the dataframes **BTCoin_df** and **BTCoin_Agg** is stored inside tables (**BTCPeriodicRawData** and **BTCoinDailyData**) in the database configured earlier in the code.
+6. In this block of code from line 53 to 57 the data inside the dataframes **BTCoin_df** and **BTCoin_Agg** is stored inside tables (**BTCPeriodicRawData** and **BTCoinDailyData**) in the database configured earlier in the code. The **mode("overwrite")** and **option("truncate",True)** properties are used to overwrite the data within the table without overwriting the table structure.
 ```
 #### Insert Raw data in DB ####
 BTCoin_df.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, table = "[dbo].[BTCPeriodicRawData]", properties = connection_properties)
