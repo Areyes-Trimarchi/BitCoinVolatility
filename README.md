@@ -103,11 +103,11 @@ BTCoin_df.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, 
 #### Insert data in DB from the previous dataframe (BTCoin_Agg) ####
 BTCoin_Agg.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, table = "[dbo].[BTCoinDailyData]", properties = connection_properties)
 ```
-7. Finally in this last block of code in line 60 when running in a local environment you must stop the Spark Session
+7. Finally in this last block of code in line 60 when running in a local environment you must stop the Spark Session.
 ```
 #### Close Spark Context ####
 sc.stop()
 ```
 
 ## Notes ##
-*1: Code that needs to be added if runned in a local environment or one that needs to create a spark context environment
+*1: Code that needs to be added if runned in a local environment or one that needs to create a spark context environment.
