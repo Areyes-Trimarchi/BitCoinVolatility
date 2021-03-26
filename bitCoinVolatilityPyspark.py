@@ -2,6 +2,7 @@
 import json 						#To work with jsons
 import requests 					#To get http requests
 import pyspark 						#To use pyspark
+import findspark          #To find the current spark version locally
 import pyspark.sql.functions as f 	#Access to spark functions (col, to_date, stddev, sum)
 
 
