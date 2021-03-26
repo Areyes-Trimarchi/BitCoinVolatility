@@ -20,7 +20,7 @@ These are imports that would be needed for the proper running of the code.
 - **json**: Helps to work with json structures.
 - **requests**: Helps with the handling of http requests.
 - **pyspark<sup>1</sup>**: Core library in which the spark function work 
-- **pyspark.sqk.functions<sup>1</sup>**: Stored as `f` to easy access to the methods on this library. The used methods where `col` to access certain columns in a dataframe, `to_date` to parse datetime data to date, `stddev` for the **Standard Deviation** aggregation and `sum` for the sum aggregations.
+- **pyspark.sqk.functions<sup>1</sup>**: Stored as `f` to easy access to the methods on this library. The used methods where: `col` to access certain columns in a dataframe, `to_date` to parse datetime data to date, `stddev` for the **Standard Deviation** aggregation and `sum` for the sum aggregations later explained.
 ```
 #### Import necesary libraries ####
 import json 						
@@ -28,7 +28,7 @@ import requests
 import pyspark<sup>1</sup> 						
 import pyspark.sql.functions as f 
 ```
-2. The next block from lines 8 and 9 are for the initialization of the **SparkSession** which helps establish the spark running environment.
+2. The next block from lines 8 and 9 are for the initialization of the **SparkSession** which helps establish the spark in a local environment.
 ```
 #### Create Spark Session ####
 spark = SparkSession.builder().master("local[1]").appName("BTCoinVolatility").getOrCreate()<sup>1</sup>
@@ -99,6 +99,5 @@ BTCoin_df.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, 
 #### Insert data in DB from the previous dataframe (BTCoin_Agg) ####
 BTCoin_Agg.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, table = "[dbo].[BTCoinDailyData]", properties = connection_properties)
 ```
-
 ##Notes##
 *1: Code that needs to be added if runned in a local environment or one that needs to create a spark context environment
