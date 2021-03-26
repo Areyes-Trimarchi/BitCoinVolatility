@@ -2,7 +2,7 @@
 import json 						#To work with jsons
 import requests 					#To get http requests
 import pyspark 						#To use pyspark
-import pyspark.sql.functions as f 	#Access to spark functions (col, stddev, sum)
+import pyspark.sql.functions as f 	#Access to spark functions (col, to_date, stddev, sum)
 
 
 #### Create Spark Session ####
@@ -45,6 +45,9 @@ BTCoin_Transformation = BTCoin_Transformation.withColumn('PriceAvg', (f.col('pri
 #- Aggregations -#
 #Aggregations for standard deviation and other sums can add value to the data
 BTCoin_Agg = BTCoin_Transformation.groupBy('StartDate').agg(f.stddev('PriceAvg').alias('PriceStd'),f.sum('trades_count').alias('DailyTrades'),f.sum('volume_traded').alias('DailyVolume'))
+
+#### Insert Raw data in DB ####
+BTCoin_df.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, table = "[dbo].[BTCPeriodicRawData]", properties = connection_properties)
 
 #### Insert data in DB from the previous dataframe (BTCoin_Agg) ####
 BTCoin_Agg.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, table = "[dbo].[BTCoinDailyData]", properties = connection_properties)
