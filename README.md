@@ -25,18 +25,18 @@ These are imports that would be needed for the proper running of the code.
 #### Import necesary libraries ####
 import json 						
 import requests 					
-import pyspark<sup>1</sup> 		
-import findspark<sup>1</sup> 
+#import pyspark		
+#import findspark
 import pyspark.sql.functions as f 
 ```
 2. The next block from line 9 to 14 are for the initialization of the **SparkSession** which helps establish the spark in a local environment.
 ```
-#### Create Spark Session ####<sup>1</sup> 	
-findspark.init(env_variables['Spark_env'])
-conf = pyspark.SparkConf().setAppName('BTCoinVolatility').setMaster('local')
-sc = pyspark.SparkContext(conf=conf)
-sc.setLogLevel("ERROR")
-spark = SparkSession(sc)
+#### Create Spark Session #### *1	
+#findspark.init(env_variables['Spark_env'])
+#conf = pyspark.SparkConf().setAppName('BTCoinVolatility').setMaster('local')
+#sc = pyspark.SparkContext(conf=conf)
+#sc.setLogLevel("ERROR")
+#spark = SparkSession(sc)
 ```
 3. The code block from line 16 to 28 are to establish the connection with the desired database for later storage.
 It is written earlier in the code for order purposes. This labels will be later used in the writing process.
@@ -107,8 +107,8 @@ BTCoin_Agg.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url,
 7. Finally in this last block of code in line 61 when running in a local environment you must stop the Spark Session.
 ```
 #### Close Spark Context ####
-sc.stop()
+#sc.stop() #*1
 ```
 
 ## Notes ##
-*1: Code that needs to be added if runned in a local environment or one that needs to create a spark context environment.
+*1: Code that needs to be uncommented if runned in a local environment or one that needs to create a spark context environment.

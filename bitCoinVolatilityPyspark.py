@@ -1,17 +1,17 @@
 #### Import necesary libraries ####
 import json 						#To work with jsons
 import requests 					#To get http requests
-import pyspark 						#To use pyspark
-import findspark          #To find the current spark version locally
+#import pyspark 						#To use pyspark
+#import findspark          #To find the current spark version locally
 import pyspark.sql.functions as f 	#Access to spark functions (col, to_date, stddev, sum)
 
 
 #### Create Spark Session ####
-findspark.init(env_variables['Spark_env'])
-conf = pyspark.SparkConf().setAppName('BTCoinVolatility').setMaster('local')
-sc = pyspark.SparkContext(conf=conf)
-sc.setLogLevel("ERROR")
-spark = SparkSession(sc)
+#findspark.init(env_variables['Spark_env'])
+#conf = pyspark.SparkConf().setAppName('BTCoinVolatility').setMaster('local')
+#sc = pyspark.SparkContext(conf=conf)
+#sc.setLogLevel("ERROR")
+#spark = SparkSession(sc)
 
 #### Data Base Credentials ####
 hostname =  ""
@@ -58,4 +58,4 @@ BTCoin_df.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, 
 BTCoin_Agg.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, table = "[dbo].[BTCoinDailyData]", properties = connection_properties)
 
 #### Close Spark Context ####
-sc.stop()
+#sc.stop()S
