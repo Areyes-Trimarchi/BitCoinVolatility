@@ -30,6 +30,7 @@ import requests
 import pyspark.sql.functions as f 
 ```
 2. The next block from line 9 to 14 are for the initialization of the **SparkSession** which helps establish the spark in a local environment.
+<sup>1</sup>
 ```
 #### Create Spark Session #### *1	
 #findspark.init(env_variables['Spark_env'])
@@ -104,7 +105,8 @@ BTCoin_df.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, 
 #### Insert data in DB from the previous dataframe (BTCoin_Agg) ####
 BTCoin_Agg.write.mode("overwrite").option("truncate", True).jdbc(url = jdbc_url, table = "[dbo].[BTCoinDailyData]", properties = connection_properties)
 ```
-7. Finally in this last block of code in line 61 when running in a local environment you must stop the Spark Session.
+7. Finally in this last block of code in line 61 when running in a local environment you must stop the Spark Session when running locally.
+<sup>1</sup>
 ```
 #### Close Spark Context ####
 #sc.stop() #*1
